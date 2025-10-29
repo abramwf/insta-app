@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::with(['comments.user:id,username,avatar', 'user:id,username,avatar'])->get();
 
 
         return Inertia::render('Home', [

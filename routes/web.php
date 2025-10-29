@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 
 Route::middleware('guest')->group(function () {
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/post/create', function () {
         return Inertia::render('Post');
     })->name('post.create');
+
     Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
+    Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.store');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
