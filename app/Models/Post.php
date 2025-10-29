@@ -26,4 +26,9 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class, 'post_id');
     }
+
+    public function isLikedBy($user)
+    {
+        return $this->likes->contains('user_id', $user->id);
+    }
 }

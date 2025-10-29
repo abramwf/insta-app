@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 
 
 Route::middleware('guest')->group(function () {
@@ -30,5 +31,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
     Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.store');
+    Route::post('/post/{post}/like', [LikeController::class, 'toggle'])->name('like.toggle');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
