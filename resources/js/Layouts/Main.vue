@@ -39,23 +39,24 @@
                     <div class="flex flex-col md:items-center md:flex-row md:mx-6">
                         <Link
                             class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            href="#">Home</Link>
+                            :href="route('home')">Home</Link>
                         <Link
                             class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            href="#">Profile</Link>
+                            :href="route('profile')">Profile</Link>
                         <Link
                             class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            href="#">Post</Link>
-                        <Link href="" class="flex items-center gap-x-2">
-                        <img class="object-cover w-8 h-8 rounded-full" :src="'storage/' + $page.props.auth.user.avatar"
-                            alt="">
-                        <div>
-                            <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
-                                $page.props.auth.user.username }}
-                            </h1>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.email }}</p>
+                            :href="route('post.create')">Post</Link>
+                        <div href="" class="flex items-center gap-x-2">
+                            <img class="object-cover w-8 h-8 rounded-full"
+                                :src="'storage/' + $page.props.auth.user.avatar" alt="">
+                            <div>
+                                <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
+                                    $page.props.auth.user.username }}
+                                </h1>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.email }}
+                                </p>
+                            </div>
                         </div>
-                        </Link>
                     </div>
                     <div class="flex justify-center md:block">
                         <Link

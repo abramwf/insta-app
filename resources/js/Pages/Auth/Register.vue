@@ -81,7 +81,6 @@ const submit = () => {
 
                         <h2 class="mx-3 text-gray-400" v-if="form.avatar?.name">{{ form.avatar.name }}</h2>
                         <h2 class="mx-3 text-gray-400" v-else>Upload Avatar</h2>
-                        <!-- @input="change" -->
                         <input id="dropzone-file" type="file" class="hidden" @input="change" />
                     </label>
                     <img class="object-cover size-12 rounded-full bg-slate-300 shrink-0" v-if="form.preview"
@@ -89,8 +88,12 @@ const submit = () => {
                     <div class="object-cover size-12 rounded-full shrink-0 border-2 border-dashed" v-else>
                     </div>
                     <button v-if="form.preview" type="button" @click="cancel"
-                        class="items-center cursor-pointer text-gray-500 flex size-6 text-sm rounded-full self-center font-bold">
-                        x
+                        class="items-center cursor-pointer text-gray-500 size-6 self-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="size-5 text-gray-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+
                     </button>
                 </div>
                 <small v-if="form.errors.avatar">{{ form.errors.avatar }}</small>
