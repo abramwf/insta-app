@@ -81,39 +81,62 @@ function toggleLike(post) {
     })
 }
 
+const formatDateTime = (date) => {
+    return new Date(date).toLocaleString('en-EN', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    })
+}
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('en-EN', {
+        dateStyle: 'medium',
+    })
+}
+
+
 </script>
 
 <template>
+
+    <Head title=" | Profile" />
     <div class="flex mb-10 mt-8 gap-3">
         <div class="flex flex-col gap-5">
-            <section v-for="post in posts" class="dark:bg-gray-900 w-max h-96">
+            <section v-for="post in posts" class="w-max h-96">
                 <div class="bg-white lg:flex lg:items-start justify-between min-w-4xl h-full pr-6 rounded-xl">
                     <img class="object-cover max-w-md rounded-xl h-72 lg:h-96" :src="'storage/' + post.image_path"
                         alt="">
                     <div class="mt-6 lg:w-1/2 lg:mt-0  flex flex-col relative h-full py-5 pl-6">
                         <Link href="" class="flex items-center gap-x-2 ">
-                        <img class="object-cover w-8 h-8 rounded-full" :src="'storage/' + post.user.avatar" alt="">
+                        <img v-if="post.user.avatar" class="object-cover w-8 h-8 rounded-full"
+                            :src="'storage/' + post.user.avatar" alt="">
+                        <img v-else class="object-cover w-8 h-8 rounded-full" :src="'storage/default.png'" alt="">
                         <div>
-                            <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
+                            <h1 class="text-base font-semibold text-gray-700">{{
                                 post.user.username }}
                             </h1>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ post.created_at }}</p>
+                            <p class="text-xs text-gray-500">Uploaded at {{
+                                formatDateTime(post.created_at) }}
+                            </p>
                         </div>
                         </Link>
                         <div class="border-b border-b-gray-100 pb-2">
-                            <p class="mt-3 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
+                            <p class="mt-3 text-sm text-gray-500 md:text-sm">
                                 {{ post.caption }}
                             </p>
                         </div>
                         <div class="mt-1 max-h-48 overflow-auto w-full">
                             <div v-for="comment in post.comments" class="flex gap-x-2 mt-3 ml-2 items-start">
-                                <img class="object-cover w-7 h-7 rounded-full shrink-0"
+                                <img v-if="comment.user.avatar" class="object-cover w-7 h-7 rounded-full shrink-0"
                                     :src="'storage/' + comment.user.avatar" alt="">
+                                <img v-else class="object-cover w-8 h-8 rounded-full" :src="'storage/default.png'"
+                                    alt="">
+
                                 <div>
-                                    <h1 class="text-sm font-semibold text-gray-700 capitalize dark:text-white">{{
+                                    <h1 class="text-sm font-semibold text-gray-700">{{
                                         comment.user.username }}
                                     </h1>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    <p class="text-sm text-gray-500 ">
                                         {{ comment.content }}
                                     </p>
                                 </div>
@@ -138,8 +161,8 @@ function toggleLike(post) {
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
                                 </svg>
-                                <textarea placeholder="lorem..." v-model="forms[post.id].content"
-                                    class="block  mt-2 w-full  placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-12 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"></textarea>
+                                <textarea placeholder="comment..." v-model="forms[post.id].content"
+                                    class="block  mt-2 w-full  placeholder-gray-400/70  rounded-lg border border-gray-200 bg-white px-4 h-12 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"></textarea>
                                 <button type="submit" class="cursor-pointer" :disabled="forms[post.id].processing">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-400">
@@ -155,9 +178,12 @@ function toggleLike(post) {
         </div>
         <div class="flex items-start gap-3">
             <form enctype="multipart/form-data" @submit.prevent="submit"
-                class="flex items-start gap-x-4 bg-white p-5 rounded-xl">
-                <img v-if="!isEditProfile" class="object-cover size-28 rounded-full shrink-0"
-                    :src="'storage/' + user.avatar" alt="">
+                class="flex items-start gap-x-4 bg-white p-5 rounded-xl min-w-xs">
+                <div v-if="!isEditProfile">
+                    <img v-if="user.avatar" class="object-cover size-28 rounded-full shrink-0"
+                        :src="'storage/' + user.avatar" alt="">
+                    <img v-else class="object-cover size-28 rounded-full shrink-0" :src="'storage/default.png'" alt="">
+                </div>
                 <div v-else-if="form.preview">
                     <button type="button" class="items-center cursor-pointer text-gray-500 size-6 self-center"
                         @click="cancel">
@@ -174,11 +200,10 @@ function toggleLike(post) {
                 </label>
 
                 <div>
-                    <h1 v-if="!isEditProfile" class="text-xl font-semibold text-gray-700 capitalize dark:text-white">
+                    <h1 v-if="!isEditProfile" class="text-xl font-semibold text-gray-700">
                         {{ user.username }}</h1>
                     <div v-else class="flex gap-2">
-                        <input class="border border-gray-400 rounded-md p-1 dark:text-white" name="username"
-                            v-model="form.username" />
+                        <input class="border border-gray-400 rounded-md p-1" name="username" v-model="form.username" />
 
                         <button type="submit" :disabled="form.processing"
                             class="w-full p-1 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
@@ -187,7 +212,13 @@ function toggleLike(post) {
                     </div>
                     <small v-if="form.errors.username">{{ form.errors.username }}</small>
                     <small v-if="form.errors.avatar">{{ form.errors.avatar }}</small>
-                    <p class="text-base text-gray-500 dark:text-gray-400">{{ user.email }}</p>
+                    <div>
+                        <p class="text-base text-gray-500">Since {{ formatDate(user.created_at) }}
+                        </p>
+                        <h2 class="bg-blue-400 font-medium mt-2 px-3 py-1 rounded-md text-blue-50 w-max text-xs">
+                            <span class="text-xl">{{ user.posts_count }}</span> Post
+                        </h2>
+                    </div>
                 </div>
             </form>
             <button @click="editProfile" v-if="!isEditProfile && user.id == $page.props.auth.user.id">

@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index($username)
     {
         $user = User::where('username', $username)
-            ->withCount(['posts', 'comments'])
+            ->withCount('posts')
             ->firstOrFail();
 
         $posts = $user->posts()->withCount('likes')->with(['comments.user:id,username,avatar', 'user:id,username,avatar'])->get()->map(function ($post) {
@@ -42,6 +42,6 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return back();
+        return redirect()->route('user.index', $user->username);
     }
 }

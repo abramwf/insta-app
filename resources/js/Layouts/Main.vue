@@ -1,11 +1,17 @@
 <script setup>
-
-
+import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+const page = usePage()
+const username = computed(() => page.url.replace('/@', ''))
+const isActive = computed(() => {
+    const loggedInUser = page.props.auth.user?.username
+    return username.value === loggedInUser && page.component === 'Profile'
+})
 </script>
 
 <template>
     <div>
-        <nav x-data="{ isOpen: false }" class="relative bg-white shadow dark:bg-gray-800">
+        <nav class="fixed left-0 right-0 bg-white shadow">
             <div class="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
                 <div class="flex items-center justify-between">
                     <Link :href="route('home')">
@@ -14,53 +20,39 @@
                             class="font-normal text-3xl text-blue-800">/</span><span
                             class="border-t-2 py-0.5 pl-1 border-blue-800 text-blue-700 italic">App</span></h1>
                     </Link>
-
-                    <!-- Mobile menu button -->
-                    <div class="flex lg:hidden">
-                        <button x-cloak @click="isOpen = !isOpen" type="button"
-                            class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
-                            aria-label="toggle menu">
-                            <svg x-show="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
-                            </svg>
-
-                            <svg x-show="isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-                <div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']"
-                    class="absolute gap-x-9 inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
+                <div
+                    class="gap-x-9 inset-x-0 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white  md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
                     <div class="flex flex-col md:items-center md:flex-row md:mx-6">
-                        <Link
-                            class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            :href="route('home')">Home</Link>
-                        <Link
-                            class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            :href="route('user.index', $page.props.auth.user.username)">Profile</Link>
-                        <Link
-                            class="my-2 text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 md:mx-4 md:my-0"
-                            :href="route('post.create')">Post</Link>
+                        <Link class="my-2 transition-colors duration-300 transform font-medium md:mx-4 md:my-0"
+                            :href="route('home')" :class="$page.component == 'Home' ? 'text-blue-500' : 'text-gray-700'
+                                ">Home</Link>
+                        <Link class="my-2 transition-colors duration-300 transform font-medium md:mx-4 md:my-0"
+                            :href="route('user.index', $page.props.auth.user.username)" :class="isActive
+                                ? 'text-blue-500'
+                                : 'text-gray-700'">
+                        Profile</Link>
+                        <Link class="my-2 transition-colors duration-300 transform font-medium md:mx-4 md:my-0"
+                            :href="route('post.create')" :class="$page.component == 'Post' ? 'text-blue-500' : 'text-gray-700'
+                                ">Post</Link>
                         <div href="" class="flex items-center gap-x-2">
-                            <img class="object-cover w-8 h-8 rounded-full"
+                            <img v-if="$page.props.auth.user.avatar" class="object-cover w-8 h-8 rounded-full"
                                 :src="'storage/' + $page.props.auth.user.avatar" alt="">
+                            <img v-else class="object-cover w-8 h-8 rounded-full" :src="'storage/default.png'" alt="">
                             <div>
-                                <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
+                                <h1 class="text-base font-semibold text-gray-700">{{
                                     $page.props.auth.user.username }}
                                 </h1>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.email }}
+                                <p class="text-xs text-gray-500 ">{{ $page.props.auth.user.email }}
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="flex justify-center md:block">
                         <Link
-                            class="relative cursor-pointer text-gray-700 transition-colors duration-300 transform dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300"
+                            class="relative cursor-pointer text-red-900 transition-colors duration-300 transform font-medium  hover:text-red-800 "
                             :href="route('logout')" method="post" as="button" type="button">
                         Logout
                         </Link>
@@ -68,7 +60,7 @@
                 </div>
             </div>
         </nav>
-        <main class="py-6 px-8 flex w-ful justify-center">
+        <main class="pt-20 pb-6 px-8 flex w-ful justify-center">
             <slot />
         </main>
     </div>

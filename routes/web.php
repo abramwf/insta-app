@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/post', function () {
         return Inertia::render('Post');
     })->name('post.create');
-    Route::get('/{username}', [UserController::class, 'index'])->name('user.index');
+    Route::get('/@{username}', [UserController::class, 'index'])->name('user.index');
     Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
     Route::put('/user/update', [UserController::class, 'update'])->name('user.update')->middleware(EnsureIsUser::class);
     Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.store');

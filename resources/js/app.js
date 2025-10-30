@@ -6,6 +6,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import Main from "./Layouts/Main.vue";
 
 createInertiaApp({
+    title: (title) => `InstaApp ${title}`,
     resolve: (name) => {
         const pages = import.meta.glob("./Pages/**/*.vue", { eager: true });
         let page = pages[`./Pages/${name}.vue`];

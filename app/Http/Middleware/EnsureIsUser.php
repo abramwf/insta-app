@@ -16,12 +16,12 @@ class EnsureIsUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $username = $request->route('username');
-        $user = User::where('username', $username)->first();
+        $user = $request->user(); // user login
 
-        if (!$user || $request->user()->id !== $user->id) {
+        if (!$user) {
             abort(403, 'Unauthorized action.');
         }
+
         return $next($request);
     }
 }
