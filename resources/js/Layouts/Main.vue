@@ -68,7 +68,7 @@
                 </div>
             </div>
         </nav>
-        <main class="py-6 px-8">
+        <main class="py-6 px-8 flex w-ful justify-center">
             <slot />
         </main>
     </div>

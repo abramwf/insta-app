@@ -106,7 +106,6 @@ function toggleLike(post) {
                 </div>
             </section>
         </div>
-
         <div></div>
     </div>
 </template>
