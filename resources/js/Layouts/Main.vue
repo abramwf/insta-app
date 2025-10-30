@@ -11,7 +11,7 @@ const isActive = computed(() => {
 
 <template>
     <div>
-        <nav class="fixed left-0 right-0 bg-white shadow">
+        <nav class="fixed left-0 right-0 bg-white shadow z-40">
             <div class="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
                 <div class="flex items-center justify-between">
                     <Link :href="route('home')">
