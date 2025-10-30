@@ -18,6 +18,6 @@ class CommentController extends Controller
 
         Comment::create($data);
 
-        return redirect()->route('home');
+        return back();
     }
 }

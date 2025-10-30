@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\EnsureIsUser;
 
 
 Route::middleware('guest')->group(function () {
@@ -23,15 +24,12 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/profile', function () {
-        return Inertia::render('Profile');
-    })->name('profile');
-    Route::get('/post/create', function () {
+    Route::get('/post', function () {
         return Inertia::render('Post');
     })->name('post.create');
-
+    Route::get('/{username}', [UserController::class, 'index'])->name('user.index');
     Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
-    Route::put('/user/update', [UserController::class, 'update'])->name('user.update');
+    Route::put('/user/update', [UserController::class, 'update'])->name('user.update')->middleware(EnsureIsUser::class);
     Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.store');
     Route::post('/post/{post}/like', [LikeController::class, 'toggle'])->name('like.toggle');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

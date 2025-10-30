@@ -32,16 +32,16 @@ const submit = () => {
                 <div class="object-cover w-full rounded-xl border-gray-200 border-2 border-dashed h-72 lg:h-96" v-else>
                 </div>
                 <div class="mt-6 lg:w-1/2 lg:mt-0  flex flex-col relative h-full py-5 px-5">
-                    <Link href="" class="flex items-center gap-x-2 ">
-                    <img class="object-cover w-8 h-8 rounded-full" :src="'storage/' + $page.props.auth.user.avatar"
-                        alt="">
-                    <div>
-                        <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
-                            $page.props.auth.user.username }}
-                        </h1>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.email }}</p>
+                    <div class="flex items-center gap-x-2 ">
+                        <img class="object-cover w-8 h-8 rounded-full" :src="'storage/' + $page.props.auth.user.avatar"
+                            alt="">
+                        <div>
+                            <h1 class="text-base font-semibold text-gray-700 capitalize dark:text-white">{{
+                                $page.props.auth.user.username }}
+                            </h1>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ $page.props.auth.user.email }}</p>
+                        </div>
                     </div>
-                    </Link>
                     <form @submit.prevent="submit" class="border-t border-t-gray-100 mt-2 w-full">
                         <div class="flex items-end gap-2">
                             <label for="dropzone-file"

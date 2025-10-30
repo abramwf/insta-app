@@ -5,10 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index() {}
+    public function index($username)
+    {
+        $user = User::where('username', $username)
+            ->withCount(['posts', 'comments'])
+            ->firstOrFail();
+
+        $posts = $user->posts()->withCount('likes')->with(['comments.user:id,username,avatar', 'user:id,username,avatar'])->get()->map(function ($post) {
+            $post->is_liked = $post->isLikedBy(auth()->user());
+            return $post;
+        });;
+
+        return Inertia::render('Profile', [
+            'user' => $user,
+            'posts' => $posts,
+        ]);
+    }
     public function update(Request $request)
     {
         $user = auth()->user();

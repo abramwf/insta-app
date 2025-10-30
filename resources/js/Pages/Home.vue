@@ -5,7 +5,8 @@ import { reactive } from 'vue';
 import { ref } from 'vue'
 
 const props = defineProps({
-    posts: Array
+    posts: Array,
+    users: Array
 })
 
 const forms = reactive({})
@@ -37,7 +38,7 @@ function toggleLike(post) {
 }
 </script>
 <template>
-    <div class="flex mb-10">
+    <div class="flex mb-10 gap-3">
         <div class="flex flex-col gap-5">
             <section v-for="post in posts" class="dark:bg-gray-900 w-max h-96">
                 <div class="mt-8 bg-white lg:flex lg:items-start justify-between min-w-5xl h-full pr-6 rounded-xl">
@@ -67,7 +68,7 @@ function toggleLike(post) {
                                         comment.user.username }}
                                     </h1>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ comment.content }} {{ post.is_liked }}
+                                        {{ comment.content }}
                                     </p>
                                 </div>
                             </div>
@@ -106,6 +107,22 @@ function toggleLike(post) {
                 </div>
             </section>
         </div>
-        <div></div>
+        <div class="mt-8 bg-white h-max p-5 rounded-xl">
+            <h2 class="font-medium">Other People</h2>
+            <div v-for="user in users" class="max-h-48 overflow-auto w-full">
+                <Link v-if="user.id != $page.props.auth.user.id" :href="route('user.index', user.username)"
+                    class="flex gap-x-2 mt-3 ml-2 items-start">
+                <img class="object-cover w-7 h-7 rounded-full shrink-0" :src="'storage/' + user.avatar" alt="">
+                <div>
+                    <h1 class="text-sm font-semibold text-gray-700 capitalize dark:text-white">{{
+                        user.username }}
+                    </h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {{ user.created_at }}
+                    </p>
+                </div>
+                </Link>
+            </div>
+        </div>
     </div>
 </template>
